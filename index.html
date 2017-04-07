@@ -8,7 +8,7 @@ $('html, body').css({
 </script><script>/* eslint space-infix-ops: 0, space-before-function-paren: 0, indent: 0, no-trailing-spaces: 0 */
 /* global $, createCanvas, loadFont, colorMode, blendMode, fill, text, textFont, textSize, DIFFERENCE, HSB, width,
    ellipse, ellipseMode, RADIUS, CENTER, print, rect, rectMode, rotate, PI, noStroke, height, BLEND, push, translate,
-   pop, angleMode, DEGREES */
+   pop, angleMode, DEGREES, mouseX, mouseY */
 
 let outerGrid = new Grid({
   lvl: 0,
@@ -51,7 +51,9 @@ function setup() {
 
 // eslint-disable-next-line
 function draw() {
-  // rect(width/2, height/2, width, height)
+  fill(0, 100, 0)
+  rect(width/2, height/2, width, height)
+  fill(100, 0, 92)
   blendMode(BLEND)
 
   drawGrid(outerGrid, width, height, 0, 0)
@@ -86,9 +88,16 @@ function drawGrid(grid, width, height, posX, posY) {
     for (let j = 0; j < grid.width; j++) {
       value++
       space += j===0 ? 0 : size
+
+      if (detectBlock(grid.values[value], posX +(size *0.5 +space), posY +(size *0.5+newline), size/2.4)) {
+        rect(posX +(size *0.5 +space), posY +(size *0.5+newline), size/2.4, size/2.4)
+      }
+
       if (lvl===0) {
         drawGrid(innerGrid, width*0.25, height*0.25, -width/8 +(size *0.5 +space), -height/8 +(size *0.5 +newline))
-      } else drawValue(grid.values[value], posX +(size *0.5 +space), posY +(size *0.5+newline), size/3)
+      } else {
+        drawValue(grid.values[value], posX +(size *0.5 +space), posY +(size *0.5+newline), size/3)
+      }
     }
     space = width *0.5 -(size *grid.width *0.5)
   }
@@ -130,5 +139,13 @@ function drawSharp(grid, width, height, size, posX, posY) {
     rect(posX +((width +space) /grid.width), posY +(height *0.5), size*0.03, size*grid.height*0.45, 8) // verticals
     rect(posX +(width *0.5), posY +((height +newline) /grid.height), size*grid.width*0.45, size*0.03, 8) // horizontals
   }
+}
+
+function detectBlock(grid, posX, posY, size) {
+  if (mouseX > posX -size && mouseX < posX +size) {
+    if (mouseY > posY -size && mouseY < posY +size) {
+      return true
+    }
+  } else return
 }
 </script></body></html>
