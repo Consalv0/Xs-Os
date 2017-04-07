@@ -1,8 +1,10 @@
 /* eslint space-infix-ops: 0, space-before-function-paren: 0, indent: 0, no-trailing-spaces: 0 */
 /* global $, createCanvas, loadFont, colorMode, blendMode, fill, text, textFont, textSize, DIFFERENCE, HSB, width,
-   ellipse, ellipseMode, RADIUS, CENTER, print, rect, rectMode, rotate, PI, noStroke, height, BLEND */
+   ellipse, ellipseMode, RADIUS, CENTER, print, rect, rectMode, rotate, PI, noStroke, height, BLEND, push, translate,
+   pop, angleMode, DEGREES */
 
 let outerGrid = new Grid({
+  lvl: 0,
   width: 3,
   height: 3,
   values: [0, 0, 0,
@@ -11,6 +13,7 @@ let outerGrid = new Grid({
 })
 
 let innerGrid = new Grid({
+  lvl: 1,
   width: 3,
   height: 3,
   values: [1, 1, 2,
@@ -35,6 +38,7 @@ function setup() {
   rectMode(RADIUS)
   textFont(UbuntuMono)
   colorMode(HSB, 360, 100, 100)
+  angleMode(DEGREES)
   fill(100, 0, 92)
 }
 
@@ -43,10 +47,11 @@ function draw() {
   // rect(width/2, height/2, width, height)
   blendMode(BLEND)
 
-  drawGrid(innerGrid, width, height)
+  drawGrid(outerGrid, width, height, 0, 0)
 }
 
 function Grid(options) {
+  this.lvl = 0
   this.width = 0
   this.height = 0
   this.values = []
@@ -60,34 +65,29 @@ function Grid(options) {
   }
 }
 
-function drawGrid(grid, width, height) {
-  this.grid = grid
-  this.width = width
-  this.height = height
-
+function drawGrid(grid, width, height, posX, posY) {
+  let lvl = grid.lvl
   let size = height > width ? width /grid.width : height /grid.height
   let newline = height *0.5 -(size *grid.height *0.5)
   let space = width *0.5 -(size *grid.width *0.5)
   let value = -1
 
-  drawSharp(grid, width, height, size)
+  drawSharp(grid, width, height, size, posX, posY)
 
   for (let i = 0; i < grid.height; i++) {
     newline += i===0 ? 0 : size
     for (let j = 0; j < grid.width; j++) {
       value++
       space += j===0 ? 0 : size
-      drawValue(grid.values[value], size *0.5 +space, size *0.5+newline, size/3)
+      if (lvl===0) {
+        drawGrid(innerGrid, width*0.25, height*0.25, -width/8 +(size *0.5 +space), -height/8 +(size *0.5 +newline))
+      } else drawValue(grid.values[value], posX +(size *0.5 +space), posY +(size *0.5+newline), size/3)
     }
     space = width *0.5 -(size *grid.width *0.5)
   }
 }
 
 function drawOs(posX, posY, radius) {
-  this.radius = radius
-  this.posX = posX
-  this.posY = posY
-
   ellipse(posX, posY, radius, radius)
   blendMode(DIFFERENCE)
   ellipse(posX, posY, radius*0.8, radius*0.8)
@@ -95,22 +95,16 @@ function drawOs(posX, posY, radius) {
 }
 
 function drawXx(posX, posY, radius) {
-  this.radius = radius
-  this.posX = posX
-  this.posY = posY
-
-  // rotate(45)
-  rect(posX, posY, radius, radius*0.2, 25)
-  // rotate(45)
-  rect(posX, posY, radius*0.2, radius, 25)
+  push()
+  translate(posX, posY +radius*0.7)
+  rotate(45)
+  rect(-radius*0.5, -radius*0.5, radius, radius*0.2, 25)
+  rect(-radius*0.5, -radius*0.5, radius*0.2, radius, 25)
+  translate(posX, posY)
+  pop()
 }
 
 function drawValue(value, posX, posY, radius) {
-  this.value = value
-  this.radius = radius
-  this.posX = posX
-  this.posY = posY
-
   switch (value) {
     case 1: drawOs(posX, posY, radius); break
     case 2: drawXx(posX, posY, radius); break
@@ -118,12 +112,7 @@ function drawValue(value, posX, posY, radius) {
   }
 }
 
-function drawSharp(grid, width, height, size) {
-  this.grid = grid
-  this.width = width
-  this.height = height
-  this.lSpace = size
-
+function drawSharp(grid, width, height, size, posX, posY) {
   let newline = height *0.5 -(size *grid.height *0.5)
   let space = width *0.5 -(size *grid.width *0.5)
 
@@ -131,7 +120,7 @@ function drawSharp(grid, width, height, size) {
     newline += i===1 ? 0 : size *grid.height
       space += i===1 ? 0 : size *grid.width
 
-    rect((width +space) /grid.width, height *0.5, size*0.03, size*grid.height*0.45, 8) // verticals
-    rect(width *0.5, (height +newline) /grid.height, size*grid.width*0.45, size*0.03, 8) // horizontals
+    rect(posX +((width +space) /grid.width), posY +(height *0.5), size*0.03, size*grid.height*0.45, 8) // verticals
+    rect(posX +(width *0.5), posY +((height +newline) /grid.height), size*grid.width*0.45, size*0.03, 8) // horizontals
   }
 }
