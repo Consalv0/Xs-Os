@@ -26,10 +26,6 @@ html, body {
   background-color: #000;
 }
 
-.fa {
-  margin-top: -7px;
-}
-
 hr {
   width: 100%;
   margin-top: inherit;
@@ -104,23 +100,6 @@ p {
   white-space: pre-line;
 }
 
-.active {
-  color: @color-light !important;
-  font-size: 1rem;
-  text-align: left;
-}
-
-.shadow {
-  -webkit-box-shadow: 0 8px 100px 5px @color-shadow-light;
-  box-shadow: 0 0px 100px 5px @color-shadow-light;
-}
-
-.center-all {
-  display: flex !important;
-  justify-content: space-around;
-  align-items: center;
-}
-
 #about .row div a{
   color: @color-gray;
   @media (max-width: @range-sm) {
@@ -136,87 +115,4 @@ p {
 #game{
   background-color: #000;
   line-height: 0;
-}
-
-.section {
-  color: @color-white;
-  background-position: center;
-  background-size: cover;
-
-  background-repeat: no-repeat;
-  @padding-top: 10%;
-  @padding-bottom: 10%;
-  padding-top: @padding-top;
-  padding-bottom: @padding-bottom;
-  background-color: @color-light-brown;
-  background-attachment: fixed;
-
-  -webkit-box-shadow: 0 8px 100px 5px @color-shadow-light;
-  box-shadow: 0 0px 100px 5px @color-shadow-light;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-
-  @media (max-width: @range-lg){
-    background-attachment: inherit;
-  }
-  &#header {
-    //background-image: url(./img/header.jpg);
-    text-align: center;
-    height: 100%;
-
-    margin-top: -144px;
-    margin-bottom: -34px;
-
-    @media (max-height: 576px){
-      height: 576px;
-    }
-  }
-  &#about {
-    //background-image: url(./img/acerca.jpg);
-  }
-  &#contact {
-    //background-image: url(./img/contacto.jpg);
-  }
-  &#footer {
-    height: 10%;
-    text-align: center;
-    padding-top: 7px;
-    padding-bottom: 7px;
-    background-color: @color-white;
-    color: @color-light-brown;
-  }
-}
-
-.container#about {
-  padding-top: 5%;
-  padding-bottom: 5%;
-  font-weight: normal;
-  text-align: center;
-  color: @color-light-brown;
-  position: relative;
-  width: 100%;
-  background-color: @color-white-transparent;
-
-  @media (max-width: @range-sm) {
-    padding-top: 10%;
-    padding-bottom: 10%;
-  }
-}
-
-.logo {
-  width: 250px;
-  -webkit-filter: drop-shadow(1px 1px 70px @color-shadow);
-  filter:         drop-shadow(1px 1px 70px @color-shadow);
-  -ms-filter:     "progid:DXImageTransform.Microsoft.Dropshadow(OffX=140, OffY=140, Color='#000')";
-  filter:         "progid:DXImageTransform.Microsoft.Dropshadow(OffX=140, OffY=140, Color='#000')";
-
-  @media (max-width: @range-md) {
-    width: 175px;
-  }
-}
-
-.btn-default {
-  background-color: @color-light;
-  color: @color-gray-brown;
 }
