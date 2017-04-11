@@ -9,7 +9,7 @@ let mouseIsCliked = false
 let zoom
 let clock = 0
 let GRIDSIZE = 2
-let LEVELS = 5
+let LEVELS = 2
 
 // function Grid(options) {
 //   this.lvl = LEVELS
@@ -113,9 +113,9 @@ function makeGrids(levels, innerGrids) {
 function drawGrids(arr, posX, posY, size, lvl = 1, idx = 0) {
   let column = (idx -GRIDSIZE *Math.floor(idx/GRIDSIZE)) *size
   let line = (Math.floor(idx/GRIDSIZE)) *size
-  let extg = size*(1/GRIDSIZE)*(lvl-1/LEVELS)*0.12
 
   let innSize = size*(1/GRIDSIZE)*0.9
+  let extg = (1/size)*(1/GRIDSIZE)*(1/LEVELS)
 
   if (Array.isArray(arr)) {
     for (let i = 1; i < arr.length; i++) {
@@ -132,8 +132,8 @@ function drawGrids(arr, posX, posY, size, lvl = 1, idx = 0) {
 
 function drawSharp(posX, posY, size) {
   for (var i = 0; i < GRIDSIZE; i++) {
-    rect(posX+size*0.5, posY+size*0.5, size*0.03, size*0.85, 8)
-    rect(posX+size*0.5, posY+size*0.5, size*0.85, size*0.03, 8)
+    rect(posX+size*0.425, posY+size*0.425, size*0.03, size*0.85, 8)
+    rect(posX+size*0.425, posY+size*0.425, size*0.85, size*0.03, 8)
   }
 }
 
@@ -152,6 +152,22 @@ function drawX(posX, posY, size) {
   rect(-size, -size, size *0.4, size*1.8, 25)
   translate(posX+size, posY+size)
   pop()
+}
+
+function extgThing() {
+  if (GRIDSIZE < 2) {
+    return 0
+  } else if (GRIDSIZE === 2) {
+    return 10.33
+  } else if (GRIDSIZE === 3) {
+    return 9.25
+  } else if (GRIDSIZE === 4) {
+    return 9.33
+  } else if (GRIDSIZE === 5) {
+    return 9.4
+  } else {
+    return 9.3
+  }
 }
 
 // eslint-disable-next-line
@@ -184,7 +200,12 @@ function draw() {
   blendMode(BLEND)
 
   let size = $(window).width() > $(window).height() ? $(window).height() : $(window).width()
-  let posX = $(window).width() > $(window).height() ? $(window).width()*0.5-size*0.5 : 0
-  let posY = $(window).width() > $(window).height() ? 0 : $(window).height()*0.5-size*0.5
+  let posX = $(window).width() > $(window).height()
+    ? $(window).width()*0.5 -size*0.5 +size*(1/(GRIDSIZE+extgThing()))
+    : size*(1/(GRIDSIZE+extgThing()))
+  let posY = $(window).width() > $(window).height()
+    ? size*(1/(GRIDSIZE+extgThing()))
+    : $(window).height()*0.5 -size*0.5 +size*(1/(GRIDSIZE+extgThing()))
+
   drawGrids(grids, posX, posY, size)
 }
