@@ -1,5 +1,5 @@
 <!DOCTYPE html><link hreflang="es-MX" href="//Consalv0.github.io/MSpheres"><html><head><title>Xs & Os</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"><link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"><script language="javascript" type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.7/addons/p5.sound.js"></script><style>@import url(//fonts.googleapis.com/css?family=Lato:300,400,700,400italic|Playfair+Display);@import url(//fonts.googleapis.com/css?family=Open+Sans);html,body{height:100%;font-family:'Open Sans',sans-serif;font-size:16px;background-color:#000}hr{width:100%;margin-top:inherit;border-top-color:rgba(6,214,160,0.8)}h1{text-align:left;font-family:'Lato',serif;font-weight:500;color:#FFFF82;opacity:.8}@media (min-width:767px){h1{font-size:3.5em}}@media (min-width:992px){h1{font-size:4.5em}}h1.margin{margin-bottom:2rem}h1.title{text-align:center}h2{color:#FFFF82;font-size:1.25em;margin-top:2rem}@media (min-width:767px){h2{font-size:2em}}@media (min-width:992px){h2{font-size:2.5em}}h2.subtitle{color:#06D6A0;margin-top:.5rem}h3{font-size:1em;margin-top:2rem}@media (min-width:767px){h3{font-size:1.25em}}@media (min-width:992px){h3{font-size:1.5em}}h3.margin{margin-bottom:1.9rem}h2,h3,h4,h5,h6{font-family:'Open Sans',sans-serif;font-weight:300}a,a:active,a:visited,a:focus{color:#FFFF82}a:hover{color:rgba(6,214,160,0.8);text-decoration:none}p{white-space:pre-line}#about .row div a{color:#2E5266}@media (max-width:544px){#about .row div a{font-size:.8em}}@media (max-width:544px){#about .row div p{font-size:.8em}}#game{background-color:#000;line-height:0}</style></head><body><div id="game"></div><script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">       </script><script src="//cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.7/p5.min.js"></script><script src="//cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.7/addons/p5.sound.min.js"></script><script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script><script>/* eslint space-infix-ops: 0, space-before-function-paren: 0, indent: 0 */
-
+/* global $ */
 var navbarHeight = $('nav').outerHeight()
 $('html, body').css({
   overflow: 'hidden',
@@ -7,33 +7,163 @@ $('html, body').css({
 })
 </script><script>/* eslint space-infix-ops: 0, space-before-function-paren: 0, indent: 0, no-trailing-spaces: 0 */
 /* global $, createCanvas, loadFont, colorMode, blendMode, fill, text, textFont, textSize, DIFFERENCE, HSB, width,
-   ellipse, ellipseMode, RADIUS, CENTER, print, rect, rectMode, rotate, PI, noStroke, height, BLEND, push, translate,
-   pop, angleMode, DEGREES, mouseX, mouseY */
+   ellipse, ellipseMode, RADIUS, rect, rectMode, rotate, noStroke, height, BLEND, push, translate,
+   pop, angleMode, DEGREES, mouseX, mouseY, CENTER */
 
-let outerGrid = new Grid({
-  lvl: 0,
-  width: 3,
-  height: 3,
-  values: [0, 0, 0,
-           0, 0, 0,
-           0, 0, 0]
-})
-
-let innerGrid = new Grid({
-  lvl: 1,
-  width: 3,
-  height: 3,
-  values: [1, 1, 2,
-           2, 2, 1,
-           2, 1, 1]
-})
-
-let UbuntuMono
+// let UbuntuMono
+let grids = []
 let mouseIsCliked = false
+let zoom
 let clock = 0
+let GRIDSIZE = 2
+let LEVELS = 5
+
+// function Grid(options) {
+//   this.lvl = LEVELS
+//   this.width = width
+//   this.height = height
+//   // this.values = []
+//
+//   if (options) {
+//     for (let prop in options) {
+//       if (this.hasOwnProperty(prop)) {
+//         this[prop] = options[prop]
+//       }
+//     }
+//   }
+//
+//   this.values = []
+//   for (let i = 0; i < GRIDSIZE**2; i++) {
+//     if (this.lvl <= LEVELS-1) {
+//       // this.values.push(Math.ceil(Math.random()*3))
+//       this.values.push(3)
+//     } else {
+//       this.values.push(Math.floor(Math.random()*3))
+//     }
+//   }
+// }
+//
+// Grid.prototype = {
+//
+//   draw: function(lvl, num) {
+//     this.__drawSharp(this._posX(), this._posY(), this._size())
+//     for (var i = 0; i < this.values.length; i++) {
+//       if (this.values[i] === 1) {
+//         this.__drawX(this._posX(), this._posY(), this._size())
+//       }
+//       if (this.values[i] === 2) {
+//         this.__drawO(this._posX(), this._posY(), this._size())
+//       }
+//     }
+//   },
+//
+//   _posX: function() {
+//     let posX
+//     let colum
+//     colum = this.num-GRIDSIZE*Math.floor(this.num/GRIDSIZE)
+//     posX = colum *this._size() +this._size() *0.5
+//     return posX
+//   },
+//
+//   _posY: function() {
+//     let posY
+//     let line
+//     line = Math.floor(this.num/GRIDSIZE)
+//     posY = line *this._size() +this._size() *0.5
+//     return posY
+//   },
+//
+//   _size: function() {
+//     let size
+//     size = width/GRIDSIZE/this.lvl
+//     return size
+//   },
+//
+//   __drawSharp: function(posX, posY, size) {
+//     rect(posX, posY, size*0.1, size*2, 8)
+//   },
+//
+//   __drawO: function(posX, posY, size) {
+//     ellipse(posX, posY, size*0.4, size*0.4)
+//     blendMode(DIFFERENCE)
+//     ellipse(posX, posY, size*0.2, size*0.2)
+//     blendMode(BLEND)
+//   },
+//
+//   __drawX: function(posX, posY, size) {
+//     push()
+//     translate(posX, posY +size*0.7)
+//     rotate(45)
+//     rect(-size*0.5, -size*0.5, size, size *0.2, 25)
+//     rect(-size*0.5, -size*0.5, size *0.2, size, 25)
+//     translate(posX, posY)
+//     pop()
+//   }
+// }
+
+
+
+function makeGrids(levels, innerGrids) {
+  if (levels > 1) {
+    for (let i = 0; i < GRIDSIZE**2; i++) {
+      let newGrid = ([LEVELS-levels+2])
+      innerGrids.push(newGrid)
+      makeGrids(levels -1, newGrid)
+    }
+  } else {
+    for (let i = 0; i < GRIDSIZE**2; i++) {
+      innerGrids.push(Math.floor(Math.random()*2)+1)
+    }
+  }
+}
+
+function drawGrids(arr, posX, posY, size, lvl = 1, idx = 0) {
+  let column = (idx -GRIDSIZE *Math.floor(idx/GRIDSIZE)) *size
+  let line = (Math.floor(idx/GRIDSIZE)) *size
+  let extg = size*(1/GRIDSIZE)*(lvl-1/LEVELS)*0.12
+
+  let innSize = size*(1/GRIDSIZE)*0.9
+
+  if (Array.isArray(arr)) {
+    for (let i = 1; i < arr.length; i++) {
+      drawSharp(posX +column +extg, posY +line +extg, size)
+      drawGrids(arr[i], posX +column +extg, posY +line +extg, innSize, lvl +1, (i-1))
+    }
+  } else {
+    // (lvl, idx+1)
+    // if (arr===0) // Click zone
+    if (arr===1) drawO(posX +column +extg, posY +line +extg, innSize)
+    if (arr===2) drawX(posX +column +extg, posY +line +extg, innSize)
+  }
+}
+
+function drawSharp(posX, posY, size) {
+  for (var i = 0; i < GRIDSIZE; i++) {
+    rect(posX+size*0.5, posY+size*0.5, size*0.03, size*0.85, 8)
+    rect(posX+size*0.5, posY+size*0.5, size*0.85, size*0.03, 8)
+  }
+}
+
+function drawO(posX, posY, size) {
+  ellipse(posX+size, posY+size, size*0.8, size*0.8)
+  blendMode(DIFFERENCE)
+  ellipse(posX+size, posY+size, size*0.4, size*0.4)
+  blendMode(BLEND)
+}
+
+function drawX(posX, posY, size) {
+  push()
+  translate(posX+size, posY+size +size*1.4)
+  rotate(45)
+  rect(-size, -size, size*1.8, size *0.4, 25)
+  rect(-size, -size, size *0.4, size*1.8, 25)
+  translate(posX+size, posY+size)
+  pop()
+}
 
 // eslint-disable-next-line
 function preload() {
+  makeGrids(LEVELS, grids = ([1]))
   // UbuntuMono = loadFont('assets/UbuntuMono-Regular.ttf')
   setInterval(function() {
     clock = clock < 500 ? clock +1 : 0
@@ -42,12 +172,12 @@ function preload() {
 
 // eslint-disable-next-line
 function setup() {
-  // frameRate(1)
+  frameRate(1)
   createCanvas($(window).width(), $(window).height()).parent('game')
 
   noStroke()
   ellipseMode(RADIUS)
-  rectMode(RADIUS)
+  rectMode(CENTER)
   colorMode(HSB, 360, 100, 100)
   angleMode(DEGREES)
   fill(100, 0, 92)
@@ -60,124 +190,9 @@ function draw() {
   fill(100, 0, 92)
   blendMode(BLEND)
 
-  drawGrid(outerGrid, width, height, 0, 0)
+  let size = $(window).width() > $(window).height() ? $(window).height() : $(window).width()
+  let posX = $(window).width() > $(window).height() ? $(window).width()*0.5-size*0.5 : 0
+  let posY = $(window).width() > $(window).height() ? 0 : $(window).height()*0.5-size*0.5
+  drawGrids(grids, posX, posY, size)
 }
-
-function Grid(options) {
-  this.lvl = 0
-  this.width = 0
-  this.height = 0
-  this.values = []
-
-  if (options) {
-    for (let prop in options) {
-      if (this.hasOwnProperty(prop)) {
-        this[prop] = options[prop]
-      }
-    }
-  }
-}
-
-let zoom
-let plusX = 0
-let plusY = 0
-function drawGrid(grid, width, height, posX, posY) {
-  posX += plusX
-  posY += plusY
-  let lvl = grid.lvl
-  zoom = zoom===undefined ? 1 : zoom
-  let size = height > width ? width /grid.width *zoom: height /grid.height *zoom
-  let newline = height *0.5 -(size *grid.height *0.5)
-  let space = width *0.5 -(size *grid.width *0.5)
-  let value = -1
-
-  drawSharp(grid, width, height, size, posX, posY)
-
-  for (let i = 0; i < grid.height; i++) {
-    newline += i===0 ? 0 : size
-    for (let j = 0; j < grid.width; j++) {
-      value++
-      space += j===0 ? 0 : size
-
-      if (lvl===0) {
-        drawGrid(innerGrid, width*0.25, height*0.25, -width/8 +(size *0.5 +space), -height/8 +(size *0.5 +newline))
-        if (detectBlock(grid.values[value], posX +(size *0.5 +space), posY +(size *0.5+newline), size/2.4)) {
-          if (mouseIsCliked) {
-            zoomIn()
-            rect(posX +(size *0.5 +space), posY +(size *0.5+newline), size/2.4, size/2.4)
-            plusX = size*(zoom/2.4) -size*j
-            plusY = size*(zoom/2.4) -size*i
-            if (zoom===1) {
-              plusY = 0
-              plusX = 0
-            }
-          }
-        }
-      } else {
-        drawValue(grid.values[value], posX +(size *0.5 +space), posY +(size *0.5+newline), size/3)
-      }
-    }
-    space = width *0.5 -(size *grid.width *0.5)
-  }
-}
-
-function drawOs(posX, posY, radius) {
-  ellipse(posX, posY, radius, radius)
-  blendMode(DIFFERENCE)
-  ellipse(posX, posY, radius*0.8, radius*0.8)
-  blendMode(BLEND)
-}
-
-function drawXx(posX, posY, radius) {
-  push()
-  translate(posX, posY +radius*0.7)
-  rotate(45)
-  rect(-radius*0.5, -radius*0.5, radius, radius*0.2, 25)
-  rect(-radius*0.5, -radius*0.5, radius*0.2, radius, 25)
-  translate(posX, posY)
-  pop()
-}
-
-function drawValue(value, posX, posY, radius) {
-  switch (value) {
-    case 1: drawOs(posX, posY, radius); break
-    case 2: drawXx(posX, posY, radius); break
-    default:
-  }
-}
-
-function drawSharp(grid, width, height, size, posX, posY) {
-  let newline = height *0.5 -(size *grid.height *0.5)
-  let space = width *0.5 -(size *grid.width *0.5)
-
-  for (let i = 1; i < grid.width; i++) {
-    newline += i===1 ? 0 : size *grid.height
-      space += i===1 ? 0 : size *grid.width
-
-    rect(posX +((width +space) /grid.width), posY +(height *0.5), size*0.03, size*grid.height*0.45, 8) // verticals
-    rect(posX +(width *0.5), posY +((height +newline) /grid.height), size*grid.width*0.45, size*0.03, 8) // horizontals
-  }
-}
-
-function detectBlock(grid, posX, posY, size) {
-  if (mouseX > posX -size && mouseX < posX +size) {
-    if (mouseY > posY -size && mouseY < posY +size) {
-      return true
-    }
-  } else return
-}
-
-function zoomIn() {
-  zoom += zoom < 2.4 ? 0.2 : 0
-  if (zoom>=2.4) {
-    mouseIsCliked = false
-    zoom = 1
-  }
-}
-
-function mouseClicked() {
-  mouseIsCliked = true
-  return false
-}
-
 </script></body></html>
