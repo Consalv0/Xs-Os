@@ -1,4 +1,4 @@
-<!DOCTYPE html><link hreflang="es-MX" href="//Consalv0.github.io/MSpheres"><html><head><title>Xs & Os</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"><link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"><script language="javascript" type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.7/addons/p5.sound.js"></script><style>@import url(//fonts.googleapis.com/css?family=Lato:300,400,700,400italic|Playfair+Display);@import url(//fonts.googleapis.com/css?family=Open+Sans);html,body{height:100%;font-family:'Open Sans',sans-serif;font-size:16px;background-color:#000}hr{width:100%;margin-top:inherit;border-top-color:rgba(6,214,160,0.8)}h1{text-align:left;font-family:'Lato',serif;font-weight:500;color:#FFFF82;opacity:.8}@media (min-width:767px){h1{font-size:3.5em}}@media (min-width:992px){h1{font-size:4.5em}}h1.margin{margin-bottom:2rem}h1.title{text-align:center}h2{color:#FFFF82;font-size:1.25em;margin-top:2rem}@media (min-width:767px){h2{font-size:2em}}@media (min-width:992px){h2{font-size:2.5em}}h2.subtitle{color:#06D6A0;margin-top:.5rem}h3{font-size:1em;margin-top:2rem}@media (min-width:767px){h3{font-size:1.25em}}@media (min-width:992px){h3{font-size:1.5em}}h3.margin{margin-bottom:1.9rem}h2,h3,h4,h5,h6{font-family:'Open Sans',sans-serif;font-weight:300}a,a:active,a:visited,a:focus{color:#FFFF82}a:hover{color:rgba(6,214,160,0.8);text-decoration:none}p{white-space:pre-line}#about .row div a{color:#2E5266}@media (max-width:544px){#about .row div a{font-size:.8em}}@media (max-width:544px){#about .row div p{font-size:.8em}}#game{background-color:#000;line-height:0}</style></head><body><div id="game"></div><script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">       </script><script src="//cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.7/p5.min.js"></script><script src="//cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.7/addons/p5.sound.min.js"></script><script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script><script>/* eslint space-infix-ops: 0, space-before-function-paren: 0, indent: 0 */
+<!DOCTYPE html><link hreflang="es-MX" href="//Consalv0.github.io/MSpheres"><html><head><title>Xs & Os</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"><link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"><script language="javascript" type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/svg.js/2.5.2/svg.min.js"></script><style>@import url(//fonts.googleapis.com/css?family=Lato:300,400,700,400italic|Playfair+Display);@import url(//fonts.googleapis.com/css?family=Open+Sans);html,body{height:100%;font-family:'Open Sans',sans-serif;font-size:16px;background-color:#000}hr{width:100%;margin-top:inherit;border-top-color:rgba(6,214,160,0.8)}h1{text-align:left;font-family:'Lato',serif;font-weight:500;color:#FFFF82;opacity:.8}@media (min-width:767px){h1{font-size:3.5em}}@media (min-width:992px){h1{font-size:4.5em}}h1.margin{margin-bottom:2rem}h1.title{text-align:center}h2{color:#FFFF82;font-size:1.25em;margin-top:2rem}@media (min-width:767px){h2{font-size:2em}}@media (min-width:992px){h2{font-size:2.5em}}h2.subtitle{color:#06D6A0;margin-top:.5rem}h3{font-size:1em;margin-top:2rem}@media (min-width:767px){h3{font-size:1.25em}}@media (min-width:992px){h3{font-size:1.5em}}h3.margin{margin-bottom:1.9rem}h2,h3,h4,h5,h6{font-family:'Open Sans',sans-serif;font-weight:300}a,a:active,a:visited,a:focus{color:#FFFF82}a:hover{color:rgba(6,214,160,0.8);text-decoration:none}p{white-space:pre-line}#about .row div a{color:#2E5266}@media (max-width:544px){#about .row div a{font-size:.8em}}@media (max-width:544px){#about .row div p{font-size:.8em}}#game{background-color:#000;line-height:0}</style></head><body id="gameCanvas"><script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">       </script><script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script><script>/* eslint space-infix-ops: 0, space-before-function-paren: 0, indent: 0 */
 /* global $ */
 var navbarHeight = $('nav').outerHeight()
 $('html, body').css({
@@ -6,214 +6,141 @@ $('html, body').css({
   height: '100%'
 })
 </script><script>/* eslint space-infix-ops: 0, space-before-function-paren: 0, indent: 0, no-trailing-spaces: 0 */
-/* global $, createCanvas, loadFont, colorMode, blendMode, fill, text, textFont, textSize, DIFFERENCE, HSB, width,
-   ellipse, ellipseMode, RADIUS, rect, rectMode, rotate, noStroke, height, BLEND, push, translate,
-   pop, angleMode, DEGREES, mouseX, mouseY, CENTER */
+/* global $, SVG */
 
-// let UbuntuMono
-let grids = []
-let mouseIsCliked = false
-let zoom
-let clock = 0
-let GRIDSIZE = 2
-let LEVELS = 2
+/* SETUP */
+// =================
+var make = SVG('gameCanvas').size('100%', '100%')
 
-// function Grid(options) {
-//   this.lvl = LEVELS
-//   this.width = width
-//   this.height = height
-//   // this.values = []
-//
-//   if (options) {
-//     for (let prop in options) {
-//       if (this.hasOwnProperty(prop)) {
-//         this[prop] = options[prop]
-//       }
-//     }
-//   }
-//
-//   this.values = []
-//   for (let i = 0; i < GRIDSIZE**2; i++) {
-//     if (this.lvl <= LEVELS-1) {
-//       // this.values.push(Math.ceil(Math.random()*3))
-//       this.values.push(3)
-//     } else {
-//       this.values.push(Math.floor(Math.random()*3))
-//     }
-//   }
-// }
-//
-// Grid.prototype = {
-//
-//   draw: function(lvl, num) {
-//     this.__drawSharp(this._posX(), this._posY(), this._size())
-//     for (var i = 0; i < this.values.length; i++) {
-//       if (this.values[i] === 1) {
-//         this.__drawX(this._posX(), this._posY(), this._size())
-//       }
-//       if (this.values[i] === 2) {
-//         this.__drawO(this._posX(), this._posY(), this._size())
-//       }
-//     }
-//   },
-//
-//   _posX: function() {
-//     let posX
-//     let colum
-//     colum = this.num-GRIDSIZE*Math.floor(this.num/GRIDSIZE)
-//     posX = colum *this._size() +this._size() *0.5
-//     return posX
-//   },
-//
-//   _posY: function() {
-//     let posY
-//     let line
-//     line = Math.floor(this.num/GRIDSIZE)
-//     posY = line *this._size() +this._size() *0.5
-//     return posY
-//   },
-//
-//   _size: function() {
-//     let size
-//     size = width/GRIDSIZE/this.lvl
-//     return size
-//   },
-//
-//   __drawSharp: function(posX, posY, size) {
-//     rect(posX, posY, size*0.1, size*2, 8)
-//   },
-//
-//   __drawO: function(posX, posY, size) {
-//     ellipse(posX, posY, size*0.4, size*0.4)
-//     blendMode(DIFFERENCE)
-//     ellipse(posX, posY, size*0.2, size*0.2)
-//     blendMode(BLEND)
-//   },
-//
-//   __drawX: function(posX, posY, size) {
-//     push()
-//     translate(posX, posY +size*0.7)
-//     rotate(45)
-//     rect(-size*0.5, -size*0.5, size, size *0.2, 25)
-//     rect(-size*0.5, -size*0.5, size *0.2, size, 25)
-//     translate(posX, posY)
-//     pop()
-//   }
-// }
+var GRIDSIZE = 3
+var LEVELS = 3
 
+var values = []
+var turn = false
+var board = make.group().addClass('board')
+var boardBox = board.bbox()
+make.rect(boardBox.width, boardBox.height).fill('#fff')
+// eslint-disable-next-line
+var viewbox = make.viewbox(0, 0, $(window).width(), $(window).height())
 
+var width = $(window).width()
+var height = $(window).height()
+var boardSize = $(window).width() > $(window).height() ? $(window).height()*0.9 : $(window).width()*0.9
 
-function makeGrids(levels, innerGrids) {
-  if (levels > 1) {
+// MAKE GRIDS //
+ValuesTree(LEVELS, values = [])
+
+function ValuesTree(root, value) {
+  if (root > 1) {
     for (let i = 0; i < GRIDSIZE**2; i++) {
-      let newGrid = ([LEVELS-levels+2])
-      innerGrids.push(newGrid)
-      makeGrids(levels -1, newGrid)
+      let newGrid = []
+      value.push(newGrid)
+      ValuesTree(root -1, newGrid)
     }
   } else {
     for (let i = 0; i < GRIDSIZE**2; i++) {
-      innerGrids.push(Math.floor(Math.random()*2)+1)
+      value.push(0)
+      // value.push(Math.floor(Math.random()*3))
     }
   }
 }
+// =======END======= */
 
-function drawGrids(arr, posX, posY, size, lvl = 1, idx = 0) {
-  let column = (idx -GRIDSIZE *Math.floor(idx/GRIDSIZE)) *size
-  let line = (Math.floor(idx/GRIDSIZE)) *size
+/* OBJECTS */
+// =================
+function makeCross(group, size, plusX, plusY) {
+  let cross = group.nested().addClass('cross')
+  make.rect(size*0.7, size*0.2).dmove(plusX+size*0.12, plusY).rotate(+45)
+      .dmove(+size*0.282, size*0.282).radius(5).addTo(cross)
+  make.rect(size*0.7, size*0.2).dmove(plusX+size*0.12, plusY).rotate(-45)
+      .dmove(-size*0.282, size*0.282).radius(5).addTo(cross)
+}
 
-  let innSize = size*(1/GRIDSIZE)*0.9
-  let extg = (1/size)*(1/GRIDSIZE)*(1/LEVELS)
+function makeDonut(group, size, plusX, plusY) {
+  let donut = group.nested().addClass('donut')
+  make.circle(size*0.7).dmove(size*0.15, size*0.15)
+      .dmove(plusX, plusY).addTo(donut)
+  make.circle(size*0.35).fill('#000').dmove(size*0.325, size*0.325)
+      .dmove(plusX, plusY).addTo(donut)
+}
 
-  if (Array.isArray(arr)) {
-    for (let i = 1; i < arr.length; i++) {
-      drawSharp(posX +column +extg, posY +line +extg, size)
-      drawGrids(arr[i], posX +column +extg, posY +line +extg, innSize, lvl +1, (i-1))
+function makeBSpace(group, size, plusX, plusY) {
+  let bSpace = group.nested().addClass('bSpace')
+  make.rect(size, size).dmove(plusX, plusY)
+      .click(function() { clicked(this) }).fill({ opacity: 0 }).addTo(bSpace)
+}
+
+function makeSharp(group, size, plusX, plusY) {
+  let grid = group.nested().addClass('grid')
+  for (var i = 1; i < GRIDSIZE; i++) {
+    make.rect(size*0.8, size*0.03).move(size*0.1, size*i/(GRIDSIZE)-size*0.015)
+        .radius(10).dmove(plusX, plusY).addTo(grid)
+    make.rect(size*0.03, size*0.8).move(size*i/(GRIDSIZE)-size*0.015, size*0.1)
+        .radius(10).dmove(plusX, plusY).addTo(grid)
+  }
+}
+
+$('#gameCanvas g.board').each(function() {
+  this.instance.fill('#fff')
+})
+// =======END======= */
+
+/* BOARD BUILD */
+// =================
+createBoard(values, 0, boardSize, -boardSize*0.01, -boardSize*0.01)
+
+function createBoard(element, idx, size, plusX, plusY) {
+  if (element === values) makeSharp(board, size, plusX, plusY)
+  let innerSize = size/GRIDSIZE
+  if (Array.isArray(element)) {
+    element.forEach(function(element, idx) {
+      let posX = (idx-GRIDSIZE *Math.floor(idx/GRIDSIZE))*innerSize +plusY
+      let posY = (Math.floor(idx/GRIDSIZE))*innerSize +plusX
+      if (Array.isArray(element)) {
+        makeSharp(board, innerSize, posX, posY)
+        createBoard(element, idx, innerSize, posX, posY)
+      } else {
+        if (element === 0) makeBSpace(board, innerSize, posX, posY)
+        if (element === 1) makeDonut(board, innerSize, posX, posY)
+        if (element === 2) makeCross(board, innerSize, posX, posY)
+      }
+    })
+  }
+}
+// =======END======= */
+
+/* BOARD LISTENER */
+// =================
+  // $('#gameCanvas').on('touchend', function() {
+  //   turn = !turn
+  // })
+  function clicked(element) {
+    if (turn) {
+      makeDonut(element.parent(SVG.G), element.width(), element.x(), element.y())
+    } else {
+      makeCross(element.parent(SVG.G), element.width(), element.x(), element.y())
     }
-  } else {
-    // (lvl, idx+1)
-    // if (arr===0) // Click zone
-    if (arr===1) drawO(posX +column +extg, posY +line +extg, innSize)
-    if (arr===2) drawX(posX +column +extg, posY +line +extg, innSize)
+    turn = !turn
+    element.remove()
   }
+// =======END======= */
+
+/* CANVAS LISTENER */
+// =================
+window.addEventListener('resize', transCanvas, false)
+transCanvas()
+$('#gameCanvas g.board').each(function() {
+  this.instance.finish()
+})
+
+function transCanvas() {
+  width = $(window).width()
+  height = $(window).height()
+
+  viewbox = make.viewbox(0, 0, $(window).width(), $(window).height())
+  $('#gameCanvas g.board').each(function() {
+    this.instance.finish().animate(1000, '>', 0).center(width*0.5, height*0.5)
+  })
 }
-
-function drawSharp(posX, posY, size) {
-  for (var i = 0; i < GRIDSIZE; i++) {
-    rect(posX+size*0.425, posY+size*0.425, size*0.03, size*0.85, 8)
-    rect(posX+size*0.425, posY+size*0.425, size*0.85, size*0.03, 8)
-  }
-}
-
-function drawO(posX, posY, size) {
-  ellipse(posX+size, posY+size, size*0.8, size*0.8)
-  blendMode(DIFFERENCE)
-  ellipse(posX+size, posY+size, size*0.4, size*0.4)
-  blendMode(BLEND)
-}
-
-function drawX(posX, posY, size) {
-  push()
-  translate(posX+size, posY+size +size*1.4)
-  rotate(45)
-  rect(-size, -size, size*1.8, size *0.4, 25)
-  rect(-size, -size, size *0.4, size*1.8, 25)
-  translate(posX+size, posY+size)
-  pop()
-}
-
-function extgThing() {
-  if (GRIDSIZE < 2) {
-    return 0
-  } else if (GRIDSIZE === 2) {
-    return 10.33
-  } else if (GRIDSIZE === 3) {
-    return 9.25
-  } else if (GRIDSIZE === 4) {
-    return 9.33
-  } else if (GRIDSIZE === 5) {
-    return 9.4
-  } else {
-    return 9.3
-  }
-}
-
-// eslint-disable-next-line
-function preload() {
-  makeGrids(LEVELS, grids = ([1]))
-  // UbuntuMono = loadFont('assets/UbuntuMono-Regular.ttf')
-  setInterval(function() {
-    clock = clock < 500 ? clock +1 : 0
-  }, 1)
-}
-
-// eslint-disable-next-line
-function setup() {
-  frameRate(1)
-  createCanvas($(window).width(), $(window).height()).parent('game')
-
-  noStroke()
-  ellipseMode(RADIUS)
-  rectMode(CENTER)
-  colorMode(HSB, 360, 100, 100)
-  angleMode(DEGREES)
-  fill(100, 0, 92)
-}
-
-// eslint-disable-next-line
-function draw() {
-  fill(0, 100, 0)
-  rect(width/2, height/2, width, height)
-  fill(100, 0, 92)
-  blendMode(BLEND)
-
-  let size = $(window).width() > $(window).height() ? $(window).height() : $(window).width()
-  let posX = $(window).width() > $(window).height()
-    ? $(window).width()*0.5 -size*0.5 +size*(1/(GRIDSIZE+extgThing()))
-    : size*(1/(GRIDSIZE+extgThing()))
-  let posY = $(window).width() > $(window).height()
-    ? size*(1/(GRIDSIZE+extgThing()))
-    : $(window).height()*0.5 -size*0.5 +size*(1/(GRIDSIZE+extgThing()))
-
-  drawGrids(grids, posX, posY, size)
-}
+// =======END======= */
 </script></body></html>
