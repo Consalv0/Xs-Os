@@ -1,165 +1,138 @@
 /* eslint space-infix-ops: 0, space-before-function-paren: 0, indent: 0, no-trailing-spaces: 0 */
-/* global $, createCanvas, loadFont, colorMode, blendMode, fill, text, textFont, textSize, DIFFERENCE, HSB, width,
-   ellipse, ellipseMode, RADIUS, rect, rectMode, rotate, noStroke, height, BLEND, push, translate,
-   pop, angleMode, DEGREES, mouseX, mouseY, CENTER, pmouseX, pmouseY, map */
+/* global $, SVG */
 
-// let UbuntuMono
-let grids = []
-let mouseIsCliked = false
-let zoom = 1
-let zPos = ({x: 0, y: 0})
-let _posX
-let _posY
-let _size
-let clock = 0
-let GRIDSIZE = 3
-let LEVELS = 2
+/* SETUP */
+// =================
+var make = SVG('gameCanvas').size('100%', '100%')
 
-let mapX = 0
-let mapY = 0
+var GRIDSIZE = 3
+var LEVELS = 3
 
-function makeGrids(levels, innerGrids) {
-  if (levels > 1) {
+var values = []
+var turn = false
+var board = make.group().addClass('board')
+var boardBox = board.bbox()
+make.rect(boardBox.width, boardBox.height).fill('#fff')
+// eslint-disable-next-line
+var viewbox = make.viewbox(0, 0, $(window).width(), $(window).height())
+
+var width = $(window).width()
+var height = $(window).height()
+var boardSize = $(window).width() > $(window).height() ? $(window).height()*0.9 : $(window).width()*0.9
+
+// MAKE GRIDS //
+ValuesTree(LEVELS, values = [])
+
+function ValuesTree(root, value) {
+  if (root > 1) {
     for (let i = 0; i < GRIDSIZE**2; i++) {
-      let newGrid = ([LEVELS-levels+2])
-      innerGrids.push(newGrid)
-      makeGrids(levels -1, newGrid)
+      let newGrid = []
+      value.push(newGrid)
+      ValuesTree(root -1, newGrid)
     }
   } else {
     for (let i = 0; i < GRIDSIZE**2; i++) {
-      innerGrids.push(Math.floor(Math.random()*2)+1)
+      value.push(0)
+      // value.push(Math.floor(Math.random()*3))
     }
   }
 }
+// =======END======= */
 
-function drawGrids(arr, posX, posY, size, lvl = 1, idx = 0) {
-  let column = (idx -GRIDSIZE *Math.floor(idx/GRIDSIZE)) *size
-  let line = (Math.floor(idx/GRIDSIZE)) *size
+/* OBJECTS */
+// =================
+function makeCross(group, size, plusX, plusY) {
+  let cross = group.nested().addClass('cross')
+  make.rect(size*0.7, size*0.2).dmove(plusX+size*0.12, plusY).rotate(+45)
+      .dmove(+size*0.282, size*0.282).radius(5).addTo(cross)
+  make.rect(size*0.7, size*0.2).dmove(plusX+size*0.12, plusY).rotate(-45)
+      .dmove(-size*0.282, size*0.282).radius(5).addTo(cross)
+}
 
-  let innSize = size*(1/GRIDSIZE)*0.9
+function makeDonut(group, size, plusX, plusY) {
+  let donut = group.nested().addClass('donut')
+  make.circle(size*0.7).dmove(size*0.15, size*0.15)
+      .dmove(plusX, plusY).addTo(donut)
+  make.circle(size*0.35).fill('#000').dmove(size*0.325, size*0.325)
+      .dmove(plusX, plusY).addTo(donut)
+}
 
-  if (Array.isArray(arr)) {
-    for (let i = 1; i < arr.length; i++) {
-      drawSharp(posX +column, posY +line, size, innSize)
-      drawGrids(arr[i], posX +column, posY +line, innSize, lvl +1, (i-1))
-    }
-  } else {
-    // (lvl, idx+1)
-    // if (arr===0) // Click zone
-    if (arr===1) drawO(posX +column, posY +line, innSize)
-    if (arr===2) drawX(posX +column, posY +line, innSize)
+function makeBSpace(group, size, plusX, plusY) {
+  let bSpace = group.nested().addClass('bSpace')
+  make.rect(size, size).dmove(plusX, plusY)
+      .click(function() { clicked(this) }).fill({ opacity: 0 }).addTo(bSpace)
+}
+
+function makeSharp(group, size, plusX, plusY) {
+  let grid = group.nested().addClass('grid')
+  for (var i = 1; i < GRIDSIZE; i++) {
+    make.rect(size*0.8, size*0.03).move(size*0.1, size*i/(GRIDSIZE)-size*0.015)
+        .radius(10).dmove(plusX, plusY).addTo(grid)
+    make.rect(size*0.03, size*0.8).move(size*i/(GRIDSIZE)-size*0.015, size*0.1)
+        .radius(10).dmove(plusX, plusY).addTo(grid)
   }
 }
 
-function drawSharp(posX, posY, size, innSize) {
-  let extg = 1/(GRIDSIZE+extgThing())
-  for (var i = 1; i < GRIDSIZE; i += 1.08) {
-    rect(posX +innSize*i -innSize*extg*i,
-         posY +innSize*(GRIDSIZE*0.5) -innSize*GRIDSIZE*0.25*extg, size*0.03, size*0.8, 8)
+$('#gameCanvas g.board').each(function() {
+  this.instance.fill('#fff')
+})
+// =======END======= */
 
-    rect(posX +innSize*(GRIDSIZE*0.5) -innSize*GRIDSIZE*0.25*extg,
-         posY +innSize*i -innSize*extg*i, size*0.8, size*0.03, 8)
-  }
-}
+/* BOARD BUILD */
+// =================
+createBoard(values, 0, boardSize, -boardSize*0.01, -boardSize*0.01)
 
-function drawO(posX, posY, size) {
-  let extg = size+size*GRIDSIZE*1.5*(1/(GRIDSIZE+extgThing()))
-  // rect(posX+extg, posY+extg, size*2, size*2)
-  ellipse(posX+extg, posY+extg, size*0.8, size*0.8)
-  blendMode(DIFFERENCE)
-  ellipse(posX+extg, posY+extg, size*0.4, size*0.4)
-  blendMode(BLEND)
-}
-
-function drawX(posX, posY, size) {
-  let extg = size+size*GRIDSIZE*1.5*(1/(GRIDSIZE+extgThing()))
-  push()
-  translate(posX+extg, posY+extg +size*1.4)
-  rotate(45)
-  rect(-size, -size, size*1.8, size *0.4, 25)
-  rect(-size, -size, size *0.4, size*1.8, 25)
-  translate(posX+extg, posY+extg)
-  pop()
-}
-
-function extgThing() {
-  if (GRIDSIZE < 2) {
-    return 0
-  } else if (GRIDSIZE === 2) {
-    return 10.33
-  } else if (GRIDSIZE === 3) {
-    return 9.25
-  } else if (GRIDSIZE === 4) {
-    return 9.33
-  } else if (GRIDSIZE === 5) {
-    return 9.4
-  } else {
-    return 9.3
-  }
-}
-
-// eslint-disable-next-line
-function preload() {
-  makeGrids(LEVELS, grids = ([1]))
-  // UbuntuMono = loadFont('assets/UbuntuMono-Regular.ttf')
-  setInterval(function() {
-    clock = clock < 500 ? clock +1 : 0
-  }, 1)
-}
-
-// eslint-disable-next-line
-function setup() {
-  // frameRate(1)
-  createCanvas($(window).width(), $(window).height()).parent('game')
-
-  noStroke()
-  ellipseMode(RADIUS)
-  rectMode(CENTER)
-  colorMode(HSB, 360, 100, 100)
-  angleMode(DEGREES)
-  fill(100, 0, 92)
-}
-
-// eslint-disable-next-line
-function draw() {
-  fill(0, 100, 0)
-  rect(width*0.5, height*0.5, width, height)
-  fill(100, 0, 92)
-  blendMode(BLEND)
-
-  _size = $(window).width() > $(window).height() ? $(window).height()*zoom : $(window).width()*zoom
-  _posX = $(window).width() > $(window).height()
-    ? $(window).width()*0.5 -_size*0.5 +_size*(1/(GRIDSIZE+extgThing()))*zoom -mapX*(_size/GRIDSIZE) +mapX*(_size*0.1)
-    : _size*(1/(GRIDSIZE+extgThing()))*(1/zoom) -mapX*(_size/GRIDSIZE) +mapX*(_size*0.1)
-  _posY = $(window).width() > $(window).height()
-    ? _size*(1/(GRIDSIZE+extgThing()))*(1/zoom) -mapY*(_size/GRIDSIZE) +mapY*(_size*0.1)
-    : $(window).height()*0.5 -_size*0.5 +_size*(1/(GRIDSIZE+extgThing()))*zoom -mapY*(_size/GRIDSIZE) +mapY*(_size*0.1)
-
-  drawGrids(grids, _posX, _posY, _size)
-}
-
-// eslint-disable-next-line
-function touchEnded() {
-  console.log(mapX, mapY)
-  if (zoom > 1) {
-    mapX = 0
-    mapY = 0
-    zoom = 1
-    zPos = ({
-      x: 0,
-      y: 0
-    })
-  } else {
-    if (pmouseX > _posX && pmouseX < _posX+(_size*0.85)) {
-      if (pmouseY > _posY && pmouseY < _posY+(_size*0.85)) {
-        mapX = Math.floor(map(pmouseX, +_posX, _size*0.85 +_posX, 0, GRIDSIZE))
-        mapY = Math.floor(map(pmouseY, +_posY, _size*0.85 +_posY, 0, GRIDSIZE))
-        zoom = zoom*2
-        zPos = ({
-          x: mapX,
-          y: mapY
-        })
+function createBoard(element, idx, size, plusX, plusY) {
+  if (element === values) makeSharp(board, size, plusX, plusY)
+  let innerSize = size/GRIDSIZE
+  if (Array.isArray(element)) {
+    element.forEach(function(element, idx) {
+      let posX = (idx-GRIDSIZE *Math.floor(idx/GRIDSIZE))*innerSize +plusY
+      let posY = (Math.floor(idx/GRIDSIZE))*innerSize +plusX
+      if (Array.isArray(element)) {
+        makeSharp(board, innerSize, posX, posY)
+        createBoard(element, idx, innerSize, posX, posY)
+      } else {
+        if (element === 0) makeBSpace(board, innerSize, posX, posY)
+        if (element === 1) makeDonut(board, innerSize, posX, posY)
+        if (element === 2) makeCross(board, innerSize, posX, posY)
       }
-    }
+    })
   }
 }
+// =======END======= */
+
+/* BOARD LISTENER */
+// =================
+  // $('#gameCanvas').on('touchend', function() {
+  //   turn = !turn
+  // })
+  function clicked(element) {
+    if (turn) {
+      makeDonut(element.parent(SVG.G), element.width(), element.x(), element.y())
+    } else {
+      makeCross(element.parent(SVG.G), element.width(), element.x(), element.y())
+    }
+    turn = !turn
+    element.remove()
+  }
+// =======END======= */
+
+/* CANVAS LISTENER */
+// =================
+window.addEventListener('resize', transCanvas, false)
+transCanvas()
+$('#gameCanvas g.board').each(function() {
+  this.instance.finish()
+})
+
+function transCanvas() {
+  width = $(window).width()
+  height = $(window).height()
+
+  viewbox = make.viewbox(0, 0, $(window).width(), $(window).height())
+  $('#gameCanvas g.board').each(function() {
+    this.instance.finish().animate(1000, '>', 0).center(width*0.5, height*0.5)
+  })
+}
+// =======END======= */
